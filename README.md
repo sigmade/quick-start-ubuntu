@@ -1,1 +1,1 @@
-# quick-start-ubuntu
+# Bash scripts for install and configuration
