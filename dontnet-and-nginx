@@ -23,7 +23,7 @@ echo '[Unit]
 Description=Web API App running
 [Service]
 WorkingDirectory=/var/www/webApi
-ExecStart=/usr/bin/dotnet /var/www/webApi
+ExecStart=/usr/bin/dotnet /var/www/webApi/WebApi.dll
 Restart=always
 RestartSec=10
 KillSignal=SIGINT
