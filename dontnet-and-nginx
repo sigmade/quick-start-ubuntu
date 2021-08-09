@@ -16,6 +16,26 @@ apt-get install -y aspnetcore-runtime-5.0
 
 apt install -y nginx
 service nginx start
+systemctl enable nginx
+
+rm /etc/nginx/sites-available/default
+
+nginx -s reload
+
+echo 'server {
+        listen        80;
+        server_name   example.com *.example.com;
+        location / {
+                proxy_pass        http://127.0.0.1:5000;
+                proxy_http_version 1.1;
+                proxy_set_header   Upgrade $http_upgrade;
+                proxy_set_header   Connection keep-alive;
+                proxy_set_header   Host $host;
+                proxy_cache_bypass $http_upgrade;
+                proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header   X-Forwarded-Proto $scheme;
+        }
+}' > /etc/nginx/sites-available/default
 
 mkdir -p /var/www/webApi
 
@@ -34,31 +54,15 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 [Install]
 WantedBy=multi-user.target' > /etc/systemd/system/dotnetapp.service
 
-rm /etc/nginx/sites-available/default
-
-echo 'server {
-        listen        80;
-        server_name   example.com *.example.com;
-        location / {
-                proxy_pass        http://127.0.0.1:5000;
-                proxy_http_version 1.1;
-                proxy_set_header   Upgrade $http_upgrade;
-                proxy_set_header   Connection keep-alive;
-                proxy_set_header   Host $host;
-                proxy_cache_bypass $http_upgrade;
-                proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header   X-Forwarded-Proto $scheme;
-        }
-}' > /etc/nginx/sites-available/default
-
 # Use key -rs for start services
 while [ -n "$1" ]
 do
 case "$1" in
 -rs)echo "Start services"
-nginx -s reload
 systemctl enable dotnetapp.service
-systemctl start dotnetapp.service;;
+systemctl start dotnetapp.service
+systemctl daemon-reload
+systemctl status dotnetapp.service;;
 *) echo "$1 is not an option" ;;
 esac
 shift
