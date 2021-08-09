@@ -54,16 +54,7 @@ Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
 [Install]
 WantedBy=multi-user.target' > /etc/systemd/system/dotnetapp.service
 
-# Use key -rs for start services
-while [ -n "$1" ]
-do
-case "$1" in
--rs)echo "Start services"
-systemctl enable dotnetapp.service
-systemctl start dotnetapp.service
-systemctl daemon-reload
-systemctl status dotnetapp.service;;
-*) echo "$1 is not an option" ;;
-esac
-shift
-done
+# After upload project WebApi.dll in /var/www/webApi
+# systemctl enable dotnetapp.service
+# systemctl start dotnetapp.service
+# systemctl daemon-reload
