@@ -58,4 +58,8 @@ WantedBy=multi-user.target' > /etc/systemd/system/dotnetapp.service
 # systemctl enable dotnetapp.service
 # systemctl start dotnetapp.service
 # systemctl daemon-reload
+#
+# Diagnostics
+#
 # systemctl status dotnetapp.service
+# nginx -t
